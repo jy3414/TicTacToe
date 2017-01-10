@@ -9,8 +9,10 @@ public class TicTacToe {
 
     public static void main(String[] args) {
 
+        /* Initializing Scanner for input and the game board */
         Scanner input = new Scanner(System.in);
         Board board = new Board();
+        /* Select game type */
         System.out.println("Choose game type: ");
         System.out.println("1. Human    vs. Computer");
         System.out.println("2. Human    vs. Human");
@@ -24,6 +26,7 @@ public class TicTacToe {
                 while (!board.isGameEnd()) {
                     boolean isValidMove = false;
                     Move move = new Move();
+                    /* Check if the move is a valid move */
                     while (!isValidMove) {
                         System.out.println("Please type in your move: [format: x(0 - 2) y(0 - 2)]");
                         move = new Move(input.nextInt(), input.nextInt());
@@ -40,6 +43,7 @@ public class TicTacToe {
                     if (board.isGameEnd()) {
                         break;
                     }
+                    /* Call minimax to find the best move */
                     board.minimax(PLAYER_2, PLAYER_2);
                     move = board.getBestMove();
                     board.addMove(move, PLAYER_2);
@@ -54,6 +58,7 @@ public class TicTacToe {
                     System.out.println("Draw!");
                 }
             } else {
+                /* Randomly place a move for computer */
                 Random rand = new Random();
                 Move move = new Move(rand.nextInt(BOARD_SIZE), rand.nextInt(BOARD_SIZE));
                 board.addMove(move, PLAYER_1);
@@ -61,6 +66,7 @@ public class TicTacToe {
                 board.printBoard();
                 while (!board.isGameEnd()) {
                     boolean isValidMove = false;
+                    /* Check if the move is a valid move */
                     while (!isValidMove) {
                         System.out.println("Please type in your move: [format: x(0 - 2) y(0 - 2)]");
                         move = new Move(input.nextInt(), input.nextInt());
@@ -99,6 +105,7 @@ public class TicTacToe {
                 while (!isValidMove) {
                     System.out.println("Please type in Player " + currPlayer + "'s move: ");
                     move = new Move(input.nextInt(), input.nextInt());
+                    /* Check if the move is a valid move */
                     if (move.getX() >= 0 && move.getX() <= 2 && move.getY() >= 0 && move.getY() <= 2
                             && board.getBoard()[move.getX()][move.getY()] == ' ') {
                         isValidMove = true;
@@ -128,11 +135,13 @@ public class TicTacToe {
             }
         } else if (type == 3) {
             Random rand = new Random();
+            /* Randomly place a move for Computer 1 */
             Move move = new Move(rand.nextInt(BOARD_SIZE), rand.nextInt(BOARD_SIZE));
             board.addMove(move, PLAYER_1);
             System.out.println("Computer 1 placed a move: (" + move.getX() + ", " + move.getY() + ").");
             board.printBoard();
             while (!board.isGameEnd()) {
+                /* Call minimax for Computer 2 to find the best move for Computer 2 */
                 board.minimax(PLAYER_2, PLAYER_2);
                 move = board.getBestMove();
                 board.addMove(move, PLAYER_2);
@@ -141,14 +150,12 @@ public class TicTacToe {
                 if (board.isGameEnd()) {
                     break;
                 }
+                /* Call minimax for Computer 1 to find the best move for Computer 1 */
                 board.minimax(PLAYER_1, PLAYER_1);
                 move = board.getBestMove();
                 board.addMove(move, PLAYER_1);
                 System.out.println("Computer 1 placed a move: " + "(" + move.getX() + ", " + move.getY() + ").");
                 board.printBoard();
-                if (board.isGameEnd()) {
-                    break;
-                }
             }
             if (board.isPlayer1Win()) {
                 System.out.println("Computer 1 has won!");

@@ -44,6 +44,7 @@ class Board {
         System.out.println();
     }
 
+    /* Get current available moves */
     private List<Move> getPossibleMoves() {
         possibleMoves = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -100,6 +101,7 @@ class Board {
         }
     }
 
+    /* Get move with highest score from all the possible scores */
     Move getBestMove() {
         int max = Integer.MIN_VALUE;
         Move bestMove = new Move(-1, -1);
@@ -136,8 +138,7 @@ class Board {
         return list.get(index);
     }
 
-
-
+    /* Auxiliary function, call minimax for each player respectively */
     void minimax(int turn, int player){
         possibleScores = new ArrayList<>();
         if (player == PLAYER_1) {
@@ -148,6 +149,8 @@ class Board {
 
     }
 
+    /* Minimax for player 1, add all future possible scores into possibleScores
+       assuming the opponent always makes the best move */
     private int minimax_Player1(int depth, int turn) {
 
         if (isPlayer1Win())  {
@@ -179,6 +182,8 @@ class Board {
         return turn == 1 ? max(scores) : min(scores);
     }
 
+    /* Minimax for player 2, add all future possible scores into possibleScores
+           assuming the opponent always makes the best move */
     private int minimax_Player2(int depth, int turn) {
 
         if (isPlayer1Win())  {
