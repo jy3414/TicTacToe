@@ -42,7 +42,7 @@ public class AIPlayer implements Player{
 
     private Move getBestMove() {
         int max = Integer.MIN_VALUE;
-        Move bestMove = new Move();
+        Move bestMove = new Move(-1, -1);
         for (MoveWithScore move : possibleScores) {
             if (move.getScore() > max) {
                 max = move.getScore();

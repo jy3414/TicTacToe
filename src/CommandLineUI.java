@@ -43,7 +43,7 @@ public class CommandLineUI implements UI{
 
     @Override
     public Move getMove(int playerNum, Board board) {
-        Move move = new Move();
+        Move move = new Move(-1, -1);
         boolean isValidMove = false;
         while (!isValidMove) {
             System.out.println("Please type in Player " + playerNum + "'s move: ");

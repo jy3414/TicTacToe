@@ -16,6 +16,28 @@ class Board {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                sb.append(board[i][j]);
+            }
+        }
+        return sb.toString();
+    }
+
+    Board(String setup) {
+        this.board = new char[3][3];
+        this.possibleMoves = new ArrayList<>();
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                board[i][j] = setup.charAt(i * 3 + j);
+            }
+        }
+    }
+
+
     char[][] getBoard() {
         return this.board;
     }
