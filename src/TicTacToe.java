@@ -1,171 +1,46 @@
-import java.util.Random;
-import java.util.Scanner;
-
 public class TicTacToe {
 
-    private static final int BOARD_SIZE = 3;
-    private static final int PLAYER_1 = 1;
-    private static final int PLAYER_2 = 2;
-
     public static void main(String[] args) {
+        UI ui = new CommandLineUI();
+        int gameMode = ui.getGameMode();
+        if (gameMode == 1) {
+            int turn = ui.getPlayerTurn();
+            if (turn == 1) {
+                HumanPlayer p1 = new HumanPlayer(1, ui);
+                AIPlayer p2 = new AIPlayer(2);
+                startGame(ui, p1, p2);
+            } else if (turn == 2) {
+                AIPlayer p1 = new AIPlayer(1);
+                HumanPlayer p2 = new HumanPlayer(2, ui);
+                startGame(ui, p1, p2);
+            }
+        } else if (gameMode == 2) {
+            HumanPlayer p1 = new HumanPlayer(1, ui);
+            HumanPlayer p2 = new HumanPlayer(2, ui);
+            startGame(ui, p1, p2);
+        } else if (gameMode == 3) {
+            AIPlayer p1 = new AIPlayer(1);
+            AIPlayer p2 = new AIPlayer(2);
+            startGame(ui, p1, p2);
+        }
+    }
 
-        /* Initializing Scanner for input and the game board */
-        Scanner input = new Scanner(System.in);
+    private static void startGame(UI ui, Player p1, Player p2) {
         Board board = new Board();
-        /* Select game type */
-        System.out.println("Choose game type: ");
-        System.out.println("1. Human    vs. Computer");
-        System.out.println("2. Human    vs. Human");
-        System.out.println("3. Computer vs. Computer");
-        int type = input.nextInt();
-        if (type == 1) {
-            System.out.println("Choose who plays first: ");
-            System.out.println("1. You");
-            System.out.println("2. Computer");
-            if (input.nextInt() == 1) {
-                while (!board.isGameEnd()) {
-                    boolean isValidMove = false;
-                    Move move = new Move();
-                    /* Check if the move is a valid move */
-                    while (!isValidMove) {
-                        System.out.println("Please type in your move: [format: x(0 - 2) y(0 - 2)]");
-                        move = new Move(input.nextInt(), input.nextInt());
-                        if (move.getX() >= 0 && move.getX() <= 2 && move.getY() >= 0 && move.getY() <= 2
-                                && board.getBoard()[move.getX()][move.getY()] == ' ') {
-                            isValidMove = true;
-                        } else {
-                            System.out.println("Invalid move! out of bound or not available.");
-                        }
-                    }
-                    board.addMove(move, PLAYER_1);
-                    System.out.println("You placed a move: (" + move.getX() + ", " + move.getY() + ").");
-                    board.printBoard();
-                    if (board.isGameEnd()) {
-                        break;
-                    }
-                    /* Call minimax to find the best move */
-                    board.minimax(PLAYER_2, PLAYER_2);
-                    move = board.getBestMove();
-                    board.addMove(move, PLAYER_2);
-                    System.out.println("Computer placed a move: (" + move.getX() + ", " + move.getY() + ").");
-                    board.printBoard();
-                }
-                if (board.isPlayer1Win()) {
-                    System.out.println("Victory!");
-                } else if (board.isPlayer2Win()) {
-                    System.out.println("Defeat!");
-                } else if (board.isDraw()) {
-                    System.out.println("Draw!");
-                }
-            } else {
-                /* Randomly place a move for computer */
-                Random rand = new Random();
-                Move move = new Move(rand.nextInt(BOARD_SIZE), rand.nextInt(BOARD_SIZE));
-                board.addMove(move, PLAYER_1);
-                System.out.println("Computer placed a move: (" + move.getX() + ", " + move.getY() + ").");
-                board.printBoard();
-                while (!board.isGameEnd()) {
-                    boolean isValidMove = false;
-                    /* Check if the move is a valid move */
-                    while (!isValidMove) {
-                        System.out.println("Please type in your move: [format: x(0 - 2) y(0 - 2)]");
-                        move = new Move(input.nextInt(), input.nextInt());
-                        if (move.getX() >= 0 && move.getX() <= 2 && move.getY() >= 0 && move.getY() <= 2
-                                && board.getBoard()[move.getX()][move.getY()] == ' ') {
-                            isValidMove = true;
-                        } else {
-                            System.out.println("Invalid move! out of bound or not available.");
-                        }
-                    }
-                    board.addMove(move, PLAYER_2);
-                    System.out.println("You placed a move: (" + move.getX() + ", " + move.getY() + ").");
-                    board.printBoard();
-                    if (board.isGameEnd()) {
-                        break;
-                    }
-                    board.minimax(PLAYER_1, PLAYER_1);
-                    move = board.getBestMove();
-                    board.addMove(move, PLAYER_1);
-                    System.out.println("Computer placed a move: (" + move.getX() + ", " + move.getY() + ").");
-                    board.printBoard();
-                }
-                if (board.isPlayer1Win()) {
-                    System.out.println("Defeat!");
-                } else if (board.isPlayer2Win()) {
-                    System.out.println("Victory!");
-                } else if (board.isDraw()){
-                    System.out.println("Draw!");
-                }
+        ui.showBoard(board);
+        while (!board.isGameEnd()) {
+            p1.takeMove(board);
+            ui.showBoard(board);
+            if (board.isGameEnd()) {
+                ui.endGameMessage(board);
+                break;
             }
-        } else if (type == 2) {
-            int currPlayer = PLAYER_1;
-            while (!board.isGameEnd()) {
-                boolean isValidMove = false;
-                Move move = new Move();
-                while (!isValidMove) {
-                    System.out.println("Please type in Player " + currPlayer + "'s move: ");
-                    move = new Move(input.nextInt(), input.nextInt());
-                    /* Check if the move is a valid move */
-                    if (move.getX() >= 0 && move.getX() <= 2 && move.getY() >= 0 && move.getY() <= 2
-                            && board.getBoard()[move.getX()][move.getY()] == ' ') {
-                        isValidMove = true;
-                    } else {
-                        System.out.println("Invalid move! out of bound or not available.");
-                    }
-                }
-                board.addMove(move, currPlayer);
-                System.out.println("Player " + currPlayer + " placed a move: (" + move.getX()
-                        + ", " + move.getY() + ").");
-                if (currPlayer == PLAYER_1) {
-                    currPlayer = PLAYER_2;
-                } else {
-                    currPlayer = PLAYER_1;
-                }
-                board.printBoard();
-                if (board.isGameEnd()) {
-                    break;
-                }
+            p2.takeMove(board);
+            ui.showBoard(board);
+            if (board.isGameEnd()) {
+                ui.endGameMessage(board);
+                break;
             }
-            if (board.isPlayer1Win()) {
-                System.out.println("Player 1 has won!");
-            } else if (board.isPlayer2Win()) {
-                System.out.println("Player 2 has won!");
-            } else if (board.isDraw()) {
-                System.out.println("Draw!");
-            }
-        } else if (type == 3) {
-            Random rand = new Random();
-            /* Randomly place a move for Computer 1 */
-            Move move = new Move(rand.nextInt(BOARD_SIZE), rand.nextInt(BOARD_SIZE));
-            board.addMove(move, PLAYER_1);
-            System.out.println("Computer 1 placed a move: (" + move.getX() + ", " + move.getY() + ").");
-            board.printBoard();
-            while (!board.isGameEnd()) {
-                /* Call minimax for Computer 2 to find the best move for Computer 2 */
-                board.minimax(PLAYER_2, PLAYER_2);
-                move = board.getBestMove();
-                board.addMove(move, PLAYER_2);
-                System.out.println("Computer 2 placed a move: (" + move.getX() + ", " + move.getY() + ").");
-                board.printBoard();
-                if (board.isGameEnd()) {
-                    break;
-                }
-                /* Call minimax for Computer 1 to find the best move for Computer 1 */
-                board.minimax(PLAYER_1, PLAYER_1);
-                move = board.getBestMove();
-                board.addMove(move, PLAYER_1);
-                System.out.println("Computer 1 placed a move: " + "(" + move.getX() + ", " + move.getY() + ").");
-                board.printBoard();
-            }
-            if (board.isPlayer1Win()) {
-                System.out.println("Computer 1 has won!");
-            } else if (board.isPlayer2Win()) {
-                System.out.println("Computer 2 has won!");
-            } else if (board.isDraw()){
-                System.out.println("Draw!");
-            }
-        } else {
-            System.out.println("Invalid game type!");
         }
     }
 }
