@@ -58,10 +58,11 @@ public class AIPlayer implements Player{
     }
 
     private int callMinimax(int playerNum, Board board, int depth, int turn) {
+        int opponentNum = 3 - playerNum;
         if (board.isPlayerWin(playerNum))  {
             return 10;
         }
-        if (board.isPlayerWin(3 - playerNum)) {
+        if (board.isPlayerWin(opponentNum)) {
             return -10;
         }
         if (board.isDraw()) {
@@ -74,12 +75,12 @@ public class AIPlayer implements Player{
         for (Move move: possibleMoves) {
             if (turn == playerNum) {
                 board.addMove(move, playerNum);
-                int currentScore = callMinimax(playerNum, board, depth + 1, 3 - playerNum);
+                int currentScore = callMinimax(playerNum, board, depth + 1, opponentNum);
                 scores.add(currentScore);
                 if (depth == 0)
                     possibleScores.add(new MoveWithScore(currentScore, move));
-            } else if (turn == 3 - playerNum) {
-                board.addMove(move, 3 - playerNum);
+            } else if (turn == opponentNum) {
+                board.addMove(move, opponentNum);
                 scores.add(callMinimax(playerNum, board, depth + 1, playerNum));
             }
             board.getBoard()[move.getX()][move.getY()] = ' ';
