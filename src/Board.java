@@ -59,30 +59,21 @@ class Board {
     }
 
     boolean isPlayerWin(int playerNum) {
+        char piece = ' ';
         if (playerNum == 1) {
-            if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] == 'X')
-                    || (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] == 'X')) {
-                return true;
-            }
-            for (int i = 0; i < 3; ++i) {
-                if (((board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == 'X')
-                        || (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] == 'X'))) {
-                    return true;
-                }
-            }
-            return false;
+            piece = 'X';
         } else if (playerNum == 2) {
-            if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] == 'O')
-                    || (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] == 'O')) {
+            piece = 'O';
+        }
+        if ((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] == piece)
+                || (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] == piece)) {
+            return true;
+        }
+        for (int i = 0; i < 3; ++i) {
+            if (((board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == piece)
+                    || (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] == piece))) {
                 return true;
             }
-            for (int i = 0; i < 3; ++i) {
-                if ((board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == 'O')
-                        || (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] == 'O')) {
-                    return true;
-                }
-            }
-            return false;
         }
         return false;
     }
