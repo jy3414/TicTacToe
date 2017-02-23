@@ -40,20 +40,6 @@ Run
 make run
 ```
 
-## Running the tests
-
-To run the tests:
-
-```
-AIPlayerTest
-BoardTest
-```
-
-Run
-
-```
-make test
-```
 
 
 
